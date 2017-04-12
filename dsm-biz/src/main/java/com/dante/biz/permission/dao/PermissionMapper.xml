@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dante.biz.permission.dao.PermissionMapper">
+	<resultMap id="BaseResultMap" type="com.dante.model.permission.Permission">
+		<id column="PERMISSION_ID" jdbcType="VARCHAR" property="permissionId" />
+		<result column="PERMISSION_TYPE" jdbcType="VARCHAR" property="permissionType" />
+		<result column="PERMISSION_NAME" jdbcType="VARCHAR" property="permissionName" />
+		<result column="PERMISSION_URL" jdbcType="VARCHAR" property="permissionUrl" />
+		<result column="PERMISSION_DESC" jdbcType="VARCHAR" property="permissionDesc" />
+		<result column="IS_MENU" jdbcType="VARCHAR" property="isMenu" />
+		<result column="MENU_NAME" jdbcType="VARCHAR" property="menuName" />
+		<result column="MENU_NO" jdbcType="VARCHAR" property="menuNo" />
+		<result column="PARENT_MENU" jdbcType="VARCHAR" property="parentMenu" />
+		<result column="CREATE_TIME" jdbcType="VARCHAR" property="createTime" />
+		<result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
+		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+		<result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		PERMISSION_ID, PERMISSION_TYPE, PERMISSION_NAME,
+		PERMISSION_URL, PERMISSION_DESC,
+		IS_MENU, MENU_NAME, MENU_NO,
+		PARENT_MENU, CREATE_TIME,
+		CREATE_BY, UPDATE_TIME, UPDATE_BY
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from DY_PERMISSION
+		where PERMISSION_ID =
+		#{permissionId,jdbcType=VARCHAR}
+	</select>
+	<select id="getUserPermissionList" parameterType="com.dante.model.user.User"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from (select distinct p.* from dy_permission p
+		left join
+		dy_role_permission rp on rp.permission_id = p.permission_id
+		left join
+		dy_user_role ur on ur.role_id = rp.role_id
+		where ur.user_id = #{userId,jdbcType=VARCHAR})
+		order by to_number(PERMISSION_TYPE) asc nulls last,
+			to_number(MENU_NO) asc nulls last,
+			PERMISSION_NAME asc
+	</select>
+	<select id="getRolePermissionList" parameterType="com.dante.model.role.Role"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from (select distinct p.* from dy_permission p
+		left join
+		dy_role_permission rp on rp.permission_id = p.permission_id
+		where rp.role_id = #{roleId,jdbcType=VARCHAR})
+		order by to_number(PERMISSION_TYPE) asc nulls last,
+			to_number(MENU_NO) asc nulls last,
+			PERMISSION_NAME asc
+	</select>
+	<select id="queryPermissionList" parameterType="java.util.HashMap"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from DY_PERMISSION
+		order by to_number(PERMISSION_TYPE) asc nulls last,
+			to_number(MENU_NO) asc nulls last,
+			PERMISSION_NAME asc
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		DY_PERMISSION
+		where PERMISSION_ID = #{permissionId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.dante.model.permission.Permission">
+		<selectKey resultType="java.lang.String" keyProperty="permissionId"
+			order="BEFORE">
+			select sys_guid() from dual
+		</selectKey>
+		insert into DY_PERMISSION (PERMISSION_ID, PERMISSION_TYPE,
+		PERMISSION_NAME,
+		PERMISSION_URL, PERMISSION_DESC, IS_MENU,
+		MENU_NAME,
+		MENU_NO, PARENT_MENU,
+		CREATE_TIME, CREATE_BY,
+		UPDATE_TIME, UPDATE_BY)
+		values
+		(#{permissionId,jdbcType=VARCHAR},
+		#{permissionType,jdbcType=VARCHAR},
+		#{permissionName,jdbcType=VARCHAR},
+		#{permissionUrl,jdbcType=VARCHAR},
+		#{permissionDesc,jdbcType=VARCHAR}, #{isMenu,jdbcType=VARCHAR},
+		#{menuName,jdbcType=VARCHAR}, #{menuNo,jdbcType=VARCHAR},
+		#{parentMenu,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR},
+		#{createBy,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=VARCHAR},
+		#{updateBy,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.dante.model.permission.Permission">
+		insert into DY_PERMISSION
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="permissionId != null">
+				PERMISSION_ID,
+			</if>
+			<if test="permissionType != null">
+				PERMISSION_TYPE,
+			</if>
+			<if test="permissionName != null">
+				PERMISSION_NAME,
+			</if>
+			<if test="permissionUrl != null">
+				PERMISSION_URL,
+			</if>
+			<if test="permissionDesc != null">
+				PERMISSION_DESC,
+			</if>
+			<if test="isMenu != null">
+				IS_MENU,
+			</if>
+			<if test="menuName != null">
+				MENU_NAME,
+			</if>
+			<if test="menuNo != null">
+				MENU_NO,
+			</if>
+			<if test="parentMenu != null">
+				PARENT_MENU,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+			<if test="createBy != null">
+				CREATE_BY,
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME,
+			</if>
+			<if test="updateBy != null">
+				UPDATE_BY,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="permissionId != null">
+				#{permissionId,jdbcType=VARCHAR},
+			</if>
+			<if test="permissionType != null">
+				#{permissionType,jdbcType=VARCHAR},
+			</if>
+			<if test="permissionName != null">
+				#{permissionName,jdbcType=VARCHAR},
+			</if>
+			<if test="permissionUrl != null">
+				#{permissionUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="permissionDesc != null">
+				#{permissionDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="isMenu != null">
+				#{isMenu,jdbcType=VARCHAR},
+			</if>
+			<if test="menuName != null">
+				#{menuName,jdbcType=VARCHAR},
+			</if>
+			<if test="menuNo != null">
+				#{menuNo,jdbcType=VARCHAR},
+			</if>
+			<if test="parentMenu != null">
+				#{parentMenu,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.dante.model.permission.Permission">
+		update DY_PERMISSION
+		<set>
+			<if test="permissionType != null">
+				PERMISSION_TYPE = #{permissionType,jdbcType=VARCHAR},
+			</if>
+			<if test="permissionName != null">
+				PERMISSION_NAME = #{permissionName,jdbcType=VARCHAR},
+			</if>
+			<if test="permissionUrl != null">
+				PERMISSION_URL = #{permissionUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="permissionDesc != null">
+				PERMISSION_DESC = #{permissionDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="isMenu != null">
+				IS_MENU = #{isMenu,jdbcType=VARCHAR},
+			</if>
+			<if test="menuName != null">
+				MENU_NAME = #{menuName,jdbcType=VARCHAR},
+			</if>
+			<if test="menuNo != null">
+				MENU_NO = #{menuNo,jdbcType=VARCHAR},
+			</if>
+			<if test="parentMenu != null">
+				PARENT_MENU = #{parentMenu,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME = #{createTime,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				CREATE_BY = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME = #{updateTime,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				UPDATE_BY = #{updateBy,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where PERMISSION_ID = #{permissionId,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.dante.model.permission.Permission">
+		update
+		DY_PERMISSION
+		set PERMISSION_TYPE = #{permissionType,jdbcType=VARCHAR},
+		PERMISSION_NAME = #{permissionName,jdbcType=VARCHAR},
+		PERMISSION_URL =
+		#{permissionUrl,jdbcType=VARCHAR},
+		PERMISSION_DESC =
+		#{permissionDesc,jdbcType=VARCHAR},
+		IS_MENU =
+		#{isMenu,jdbcType=VARCHAR},
+		MENU_NAME = #{menuName,jdbcType=VARCHAR},
+		MENU_NO = #{menuNo,jdbcType=VARCHAR},
+		PARENT_MENU =
+		#{parentMenu,jdbcType=VARCHAR},
+		CREATE_TIME =
+		#{createTime,jdbcType=VARCHAR},
+		CREATE_BY =
+		#{createBy,jdbcType=VARCHAR},
+		UPDATE_TIME =
+		#{updateTime,jdbcType=VARCHAR},
+		UPDATE_BY =
+		#{updateBy,jdbcType=VARCHAR}
+		where PERMISSION_ID =
+		#{permissionId,jdbcType=VARCHAR}
+	</update>
+</mapper>

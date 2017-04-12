@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dante.biz.role.dao.RoleMapper">
+	<resultMap id="BaseResultMap" type="com.dante.model.role.Role">
+		<id column="ROLE_ID" jdbcType="VARCHAR" property="roleId" />
+		<result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
+		<result column="ROLE_TYPE" jdbcType="VARCHAR" property="roleType" />
+		<result column="ROLE_DESC" jdbcType="VARCHAR" property="roleDesc" />
+		<result column="ROLE_DEPT" jdbcType="VARCHAR" property="roleDept" />
+		<result column="CREATE_TIME" jdbcType="VARCHAR" property="createTime" />
+		<result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
+		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+		<result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ROLE_ID, ROLE_NAME, ROLE_TYPE, ROLE_DESC, ROLE_DEPT,
+		CREATE_TIME, CREATE_BY,
+		UPDATE_TIME,
+		UPDATE_BY
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from DY_ROLE
+		where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+	</select>
+	<select id="queryRoleList" parameterType="java.util.HashMap"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from DY_ROLE
+		order by to_number(ROLE_TYPE) asc nulls last,
+			ROLE_NAME asc
+	</select>
+	<select id="queryUserRoleList" parameterType="com.dante.model.user.User"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from (select distinct r.* from dy_role r
+		left join
+		dy_user_role ur on ur.role_id = r.role_id
+		where ur.user_id = #{userId,jdbcType=VARCHAR})
+		order by to_number(ROLE_TYPE) asc nulls last,
+			ROLE_NAME asc
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		DY_ROLE
+		where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.dante.model.role.Role">
+		<selectKey resultType="java.lang.String" keyProperty="roleId"
+			order="BEFORE">
+			select sys_guid() from dual
+		</selectKey>
+		insert into DY_ROLE (ROLE_ID, ROLE_NAME, ROLE_TYPE,
+		ROLE_DESC,
+		ROLE_DEPT, CREATE_TIME,
+		CREATE_BY, UPDATE_TIME, UPDATE_BY
+		)
+		values
+		(#{roleId,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR},
+		#{roleType,jdbcType=VARCHAR},
+		#{roleDesc,jdbcType=VARCHAR},
+		#{roleDept,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR},
+		#{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR},
+		#{updateBy,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.dante.model.role.Role">
+		insert into DY_ROLE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleId != null">
+				ROLE_ID,
+			</if>
+			<if test="roleName != null">
+				ROLE_NAME,
+			</if>
+			<if test="roleType != null">
+				ROLE_TYPE,
+			</if>
+			<if test="roleDesc != null">
+				ROLE_DESC,
+			</if>
+			<if test="roleDept != null">
+				ROLE_DEPT,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+			<if test="createBy != null">
+				CREATE_BY,
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME,
+			</if>
+			<if test="updateBy != null">
+				UPDATE_BY,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleId != null">
+				#{roleId,jdbcType=VARCHAR},
+			</if>
+			<if test="roleName != null">
+				#{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="roleType != null">
+				#{roleType,jdbcType=VARCHAR},
+			</if>
+			<if test="roleDesc != null">
+				#{roleDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="roleDept != null">
+				#{roleDept,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.dante.model.role.Role">
+		update DY_ROLE
+		<set>
+			<if test="roleName != null">
+				ROLE_NAME = #{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="roleType != null">
+				ROLE_TYPE = #{roleType,jdbcType=VARCHAR},
+			</if>
+			<if test="roleDesc != null">
+				ROLE_DESC = #{roleDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="roleDept != null">
+				ROLE_DEPT = #{roleDept,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME = #{createTime,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				CREATE_BY = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME = #{updateTime,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				UPDATE_BY = #{updateBy,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.dante.model.role.Role">
+		update DY_ROLE
+		set
+		ROLE_NAME = #{roleName,jdbcType=VARCHAR},
+		ROLE_TYPE =
+		#{roleType,jdbcType=VARCHAR},
+		ROLE_DESC = #{roleDesc,jdbcType=VARCHAR},
+		ROLE_DEPT = #{roleDept,jdbcType=VARCHAR},
+		CREATE_TIME =
+		#{createTime,jdbcType=VARCHAR},
+		CREATE_BY =
+		#{createBy,jdbcType=VARCHAR},
+		UPDATE_TIME =
+		#{updateTime,jdbcType=VARCHAR},
+		UPDATE_BY =
+		#{updateBy,jdbcType=VARCHAR}
+		where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+	</update>
+</mapper>

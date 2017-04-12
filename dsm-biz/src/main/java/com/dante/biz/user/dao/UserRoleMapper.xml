@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dante.biz.user.dao.UserRoleMapper">
+	<resultMap id="BaseResultMap" type="com.dante.model.user.UserRole">
+		<id column="UR_ID" jdbcType="VARCHAR" property="urId" />
+		<result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+		<result column="ROLE_ID" jdbcType="VARCHAR" property="roleId" />
+		<result column="CREATE_TIME" jdbcType="VARCHAR" property="createTime" />
+		<result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
+		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+		<result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		UR_ID, USER_ID, ROLE_ID, CREATE_TIME, CREATE_BY,
+		UPDATE_TIME, UPDATE_BY
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from DY_USER_ROLE
+		where UR_ID = #{urId,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		DY_USER_ROLE
+		where UR_ID = #{urId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.dante.model.user.UserRole">
+		insert into DY_USER_ROLE
+		(UR_ID, USER_ID, ROLE_ID,
+		CREATE_TIME, CREATE_BY, UPDATE_TIME,
+		UPDATE_BY)
+		values (#{urId,jdbcType=VARCHAR},
+		#{userId,jdbcType=VARCHAR},
+		#{roleId,jdbcType=VARCHAR},
+		#{createTime,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=VARCHAR},
+		#{updateBy,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertAllByUser" parameterType="com.dante.model.user.User">
+		insert all
+		<foreach collection="roleList" item="role" index="index"
+			separator=" ">
+			into DY_USER_ROLE (UR_ID, USER_ID, ROLE_ID,
+			CREATE_TIME,
+			CREATE_BY, UPDATE_TIME,
+			UPDATE_BY)
+			values (sys_guid(),
+			#{userId,jdbcType=VARCHAR},
+			#{role.roleId,jdbcType=VARCHAR},
+			#{createTime,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR},
+			#{updateTime,jdbcType=VARCHAR},
+			#{updateBy,jdbcType=VARCHAR})
+		</foreach>
+		select 1 from dual
+	</insert>
+	<insert id="insertSelective" parameterType="com.dante.model.user.UserRole">
+		insert into DY_USER_ROLE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="urId != null">
+				UR_ID,
+			</if>
+			<if test="userId != null">
+				USER_ID,
+			</if>
+			<if test="roleId != null">
+				ROLE_ID,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+			<if test="createBy != null">
+				CREATE_BY,
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME,
+			</if>
+			<if test="updateBy != null">
+				UPDATE_BY,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="urId != null">
+				#{urId,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="roleId != null">
+				#{roleId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.dante.model.user.UserRole">
+		update DY_USER_ROLE
+		<set>
+			<if test="userId != null">
+				USER_ID = #{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="roleId != null">
+				ROLE_ID = #{roleId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME = #{createTime,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				CREATE_BY = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME = #{updateTime,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				UPDATE_BY = #{updateBy,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where UR_ID = #{urId,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.dante.model.user.UserRole">
+		update
+		DY_USER_ROLE
+		set USER_ID = #{userId,jdbcType=VARCHAR},
+		ROLE_ID =
+		#{roleId,jdbcType=VARCHAR},
+		CREATE_TIME =
+		#{createTime,jdbcType=VARCHAR},
+		CREATE_BY =
+		#{createBy,jdbcType=VARCHAR},
+		UPDATE_TIME =
+		#{updateTime,jdbcType=VARCHAR},
+		UPDATE_BY =
+		#{updateBy,jdbcType=VARCHAR}
+		where UR_ID = #{urId,jdbcType=VARCHAR}
+	</update>
+	<delete id="deleteByUser" parameterType="com.dante.model.user.User">
+		delete from DY_USER_ROLE
+		where user_id = #{userId,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteRepeatByUser" parameterType="com.dante.model.user.User">
+		delete from
+		DY_USER_ROLE
+		where role_id in (
+		select role_id from DY_USER_ROLE where
+		user_id = #{userId,jdbcType=VARCHAR}
+		group by role_id having
+		count(role_id) > 1
+		) and rowid not in (
+		select min(rowid) from
+		DY_USER_ROLE where user_id =
+		#{userId,jdbcType=VARCHAR} group by
+		role_id having count(role_id) > 1
+		) and user_id =
+		#{userId,jdbcType=VARCHAR}
+	</delete>
+</mapper>

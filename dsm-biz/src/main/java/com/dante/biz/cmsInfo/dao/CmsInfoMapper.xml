@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dante.biz.cmsInfo.dao.CmsInfoMapper">
+	<resultMap id="BaseResultMap" type="com.dante.model.cmsInfo.CmsInfo">
+		<id column="CMS_ID" jdbcType="VARCHAR" property="cmsId" />
+		<result column="CMS_TITLE" jdbcType="VARCHAR" property="cmsTitle" />
+		<result column="CMS_AUTHOR" jdbcType="VARCHAR" property="cmsAuthor" />
+		<result column="CMS_IMAGE_URL" jdbcType="VARCHAR" property="cmsImageUrl" />
+		<result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
+		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+		<result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />
+		<result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+	</resultMap>
+	<resultMap extends="BaseResultMap" id="ResultMapWithClob"
+		type="com.dante.model.cmsInfo.CmsInfo">
+		<result column="CMS_CONTENT" jdbcType="VARCHAR" property="cmsContent" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		CMS_ID, CMS_TITLE, CMS_AUTHOR, CMS_IMAGE_URL, CREATE_BY,
+		CREATE_DATE,
+		UPDATE_BY,
+		UPDATE_DATE
+	</sql>
+	<sql id="Clob_Column_List">
+		CMS_CONTENT
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="ResultMapWithClob">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Clob_Column_List" />
+		from DANTE_CMS_INFO
+		where CMS_ID = #{cmsId,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		DANTE_CMS_INFO
+		where CMS_ID = #{cmsId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.dante.model.cmsInfo.CmsInfo">
+		<selectKey resultType="java.lang.String" keyProperty="cmsId"
+			order="BEFORE">
+			select sys_guid() from dual
+		</selectKey>
+		insert into DANTE_CMS_INFO (CMS_ID, CMS_TITLE, CMS_AUTHOR,
+		CMS_IMAGE_URL, CREATE_BY, CREATE_DATE,
+		UPDATE_BY, UPDATE_DATE,
+		CMS_CONTENT
+		)
+		values (#{cmsId,jdbcType=VARCHAR},
+		#{cmsTitle,jdbcType=VARCHAR},
+		#{cmsAuthor,jdbcType=VARCHAR},
+		#{cmsImageUrl,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR},
+		#{createDate,jdbcType=TIMESTAMP},
+		#{updateBy,jdbcType=VARCHAR},
+		#{updateDate,jdbcType=TIMESTAMP},
+		#{cmsContent,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.dante.model.cmsInfo.CmsInfo">
+		insert into DANTE_CMS_INFO
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="cmsId != null">
+				CMS_ID,
+			</if>
+			<if test="cmsTitle != null">
+				CMS_TITLE,
+			</if>
+			<if test="cmsAuthor != null">
+				CMS_AUTHOR,
+			</if>
+			<if test="cmsImageUrl != null">
+				CMS_IMAGE_URL,
+			</if>
+			<if test="createBy != null">
+				CREATE_BY,
+			</if>
+			<if test="createDate != null">
+				CREATE_DATE,
+			</if>
+			<if test="updateBy != null">
+				UPDATE_BY,
+			</if>
+			<if test="updateDate != null">
+				UPDATE_DATE,
+			</if>
+			<if test="cmsContent != null">
+				CMS_CONTENT,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="cmsId != null">
+				#{cmsId,jdbcType=VARCHAR},
+			</if>
+			<if test="cmsTitle != null">
+				#{cmsTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="cmsAuthor != null">
+				#{cmsAuthor,jdbcType=VARCHAR},
+			</if>
+			<if test="cmsImageUrl != null">
+				#{cmsImageUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createDate != null">
+				#{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null">
+				#{updateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="cmsContent != null">
+				#{cmsContent,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.dante.model.cmsInfo.CmsInfo">
+		update DANTE_CMS_INFO
+		<set>
+			<if test="cmsTitle != null">
+				CMS_TITLE = #{cmsTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="cmsAuthor != null">
+				CMS_AUTHOR = #{cmsAuthor,jdbcType=VARCHAR},
+			</if>
+			<if test="cmsImageUrl != null">
+				CMS_IMAGE_URL = #{cmsImageUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				CREATE_BY = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createDate != null">
+				CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				UPDATE_BY = #{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null">
+				UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="cmsContent != null">
+				CMS_CONTENT = #{cmsContent,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where CMS_ID = #{cmsId,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.dante.model.cmsInfo.CmsInfo">
+		update
+		DANTE_CMS_INFO
+		set CMS_TITLE = #{cmsTitle,jdbcType=VARCHAR},
+		CMS_AUTHOR
+		= #{cmsAuthor,jdbcType=VARCHAR},
+		CMS_IMAGE_URL =
+		#{cmsImageUrl,jdbcType=VARCHAR},
+		CREATE_BY =
+		#{createBy,jdbcType=VARCHAR},
+		CREATE_DATE =
+		#{createDate,jdbcType=TIMESTAMP},
+		UPDATE_BY =
+		#{updateBy,jdbcType=VARCHAR},
+		UPDATE_DATE =
+		#{updateDate,jdbcType=TIMESTAMP},
+		CMS_CONTENT =
+		#{cmsContent,jdbcType=VARCHAR}
+		where CMS_ID = #{cmsId,jdbcType=VARCHAR}
+	</update>
+	<select id="queryCmsInfoList" parameterType="com.dante.model.cmsInfo.CmsInfoParam"
+		resultMap="ResultMapWithClob">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Clob_Column_List" />
+		from DANTE_CMS_INFO
+		<where>
+			<if test="searchText != null and searchText != ''">
+				and CMS_TITLE like
+				'%'||#{searchText,jdbcType=VARCHAR}||'%'
+			</if>
+		</where>
+		order by UPDATE_DATE desc nulls last
+	</select>
+</mapper>

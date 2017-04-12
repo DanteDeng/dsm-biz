@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dante.biz.fileUpload.dao.ImageMapper">
+  <resultMap id="BaseResultMap" type="com.dante.model.fileUpload.Image">
+    <id column="IMAGE_ID" jdbcType="VARCHAR" property="imageId" />
+    <result column="IMAGE_TYPE" jdbcType="VARCHAR" property="imageType" />
+    <result column="IMAGE_NAME" jdbcType="VARCHAR" property="imageName" />
+    <result column="IMAGE_URL" jdbcType="VARCHAR" property="imageUrl" />
+    <result column="IMAGE_WIDTH" jdbcType="VARCHAR" property="imageWidth" />
+    <result column="IMAGE_HEIGHT" jdbcType="VARCHAR" property="imageHeight" />
+    <result column="CREATE_DATE" jdbcType="DATE" property="createDate" />
+    <result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
+    <result column="UPDATE_DATE" jdbcType="DATE" property="updateDate" />
+    <result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    IMAGE_ID, IMAGE_TYPE, IMAGE_NAME, IMAGE_URL, IMAGE_WIDTH, IMAGE_HEIGHT, CREATE_DATE, 
+    CREATE_BY, UPDATE_DATE, UPDATE_BY
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from DY_IMAGE
+    where IMAGE_ID = #{imageId,jdbcType=VARCHAR}
+  </select>
+  <select id="queryImageList" parameterType="com.dante.model.base.PageParam"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from DY_IMAGE
+		order by UPDATE_DATE desc
+	</select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from DY_IMAGE
+    where IMAGE_ID = #{imageId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.dante.model.fileUpload.Image">
+    insert into DY_IMAGE (IMAGE_ID, IMAGE_TYPE, IMAGE_NAME, 
+      IMAGE_URL, IMAGE_WIDTH, IMAGE_HEIGHT, 
+      CREATE_DATE, CREATE_BY, UPDATE_DATE, 
+      UPDATE_BY)
+    values (#{imageId,jdbcType=VARCHAR}, #{imageType,jdbcType=VARCHAR}, #{imageName,jdbcType=VARCHAR}, 
+      #{imageUrl,jdbcType=VARCHAR}, #{imageWidth,jdbcType=VARCHAR}, #{imageHeight,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=DATE}, #{createBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=DATE}, 
+      #{updateBy,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dante.model.fileUpload.Image">
+    insert into DY_IMAGE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="imageId != null">
+        IMAGE_ID,
+      </if>
+      <if test="imageType != null">
+        IMAGE_TYPE,
+      </if>
+      <if test="imageName != null">
+        IMAGE_NAME,
+      </if>
+      <if test="imageUrl != null">
+        IMAGE_URL,
+      </if>
+      <if test="imageWidth != null">
+        IMAGE_WIDTH,
+      </if>
+      <if test="imageHeight != null">
+        IMAGE_HEIGHT,
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE,
+      </if>
+      <if test="createBy != null">
+        CREATE_BY,
+      </if>
+      <if test="updateDate != null">
+        UPDATE_DATE,
+      </if>
+      <if test="updateBy != null">
+        UPDATE_BY,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="imageId != null">
+        #{imageId,jdbcType=VARCHAR},
+      </if>
+      <if test="imageType != null">
+        #{imageType,jdbcType=VARCHAR},
+      </if>
+      <if test="imageName != null">
+        #{imageName,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null">
+        #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imageWidth != null">
+        #{imageWidth,jdbcType=VARCHAR},
+      </if>
+      <if test="imageHeight != null">
+        #{imageHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=DATE},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=DATE},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dante.model.fileUpload.Image">
+    update DY_IMAGE
+    <set>
+      <if test="imageType != null">
+        IMAGE_TYPE = #{imageType,jdbcType=VARCHAR},
+      </if>
+      <if test="imageName != null">
+        IMAGE_NAME = #{imageName,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null">
+        IMAGE_URL = #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imageWidth != null">
+        IMAGE_WIDTH = #{imageWidth,jdbcType=VARCHAR},
+      </if>
+      <if test="imageHeight != null">
+        IMAGE_HEIGHT = #{imageHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE = #{createDate,jdbcType=DATE},
+      </if>
+      <if test="createBy != null">
+        CREATE_BY = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        UPDATE_DATE = #{updateDate,jdbcType=DATE},
+      </if>
+      <if test="updateBy != null">
+        UPDATE_BY = #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where IMAGE_ID = #{imageId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dante.model.fileUpload.Image">
+    update DY_IMAGE
+    set IMAGE_TYPE = #{imageType,jdbcType=VARCHAR},
+      IMAGE_NAME = #{imageName,jdbcType=VARCHAR},
+      IMAGE_URL = #{imageUrl,jdbcType=VARCHAR},
+      IMAGE_WIDTH = #{imageWidth,jdbcType=VARCHAR},
+      IMAGE_HEIGHT = #{imageHeight,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=DATE},
+      CREATE_BY = #{createBy,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=DATE},
+      UPDATE_BY = #{updateBy,jdbcType=VARCHAR}
+    where IMAGE_ID = #{imageId,jdbcType=VARCHAR}
+  </update>
+</mapper>

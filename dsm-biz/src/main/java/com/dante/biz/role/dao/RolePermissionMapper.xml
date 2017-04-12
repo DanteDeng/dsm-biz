@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dante.biz.role.dao.RolePermissionMapper">
+	<resultMap id="BaseResultMap" type="com.dante.model.role.RolePermission">
+		<result column="RP_ID" jdbcType="VARCHAR" property="rpId" />
+		<result column="ROLE_ID" jdbcType="VARCHAR" property="roleId" />
+		<result column="PERMISSION_ID" jdbcType="VARCHAR" property="permissionId" />
+		<result column="CREATE_TIME" jdbcType="VARCHAR" property="createTime" />
+		<result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
+		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+		<result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />
+	</resultMap>
+	<insert id="insert" parameterType="com.dante.model.role.RolePermission">
+		insert into DY_ROLE_PERMISSION
+		(RP_ID, ROLE_ID, PERMISSION_ID,
+		CREATE_TIME, CREATE_BY, UPDATE_TIME,
+		UPDATE_BY)
+		values (#{rpId,jdbcType=VARCHAR},
+		#{roleId,jdbcType=VARCHAR},
+		#{permissionId,jdbcType=VARCHAR},
+		#{createTime,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=VARCHAR},
+		#{updateBy,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertAllByRole" parameterType="com.dante.model.role.Role">
+		insert all
+		<foreach collection="permissionList" item="permission" index="index"
+			separator=" ">
+			into DY_ROLE_PERMISSION (RP_ID, ROLE_ID, PERMISSION_ID,
+			CREATE_TIME, CREATE_BY, UPDATE_TIME,
+			UPDATE_BY)
+			values (sys_guid(),
+			#{roleId,jdbcType=VARCHAR},
+			#{permission.permissionId,jdbcType=VARCHAR},
+			#{createTime,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR},
+			#{updateTime,jdbcType=VARCHAR},
+			#{updateBy,jdbcType=VARCHAR})
+		</foreach>
+		select 1 from dual
+	</insert>
+	<insert id="insertSelective" parameterType="com.dante.model.role.RolePermission">
+		insert into DY_ROLE_PERMISSION
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="rpId != null">
+				RP_ID,
+			</if>
+			<if test="roleId != null">
+				ROLE_ID,
+			</if>
+			<if test="permissionId != null">
+				PERMISSION_ID,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+			<if test="createBy != null">
+				CREATE_BY,
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME,
+			</if>
+			<if test="updateBy != null">
+				UPDATE_BY,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="rpId != null">
+				#{rpId,jdbcType=VARCHAR},
+			</if>
+			<if test="roleId != null">
+				#{roleId,jdbcType=VARCHAR},
+			</if>
+			<if test="permissionId != null">
+				#{permissionId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<delete id="deleteByRole" parameterType="com.dante.model.role.Role">
+		delete from
+		DY_ROLE_PERMISSION
+		where role_id = #{roleId,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteRepeatByRole" parameterType="com.dante.model.role.Role">
+		delete from
+		DY_ROLE_PERMISSION
+		where permission_id in (
+		select permission_id from
+		DY_ROLE_PERMISSION where role_id =
+		#{roleId,jdbcType=VARCHAR} group by
+		permission_id having
+		count(permission_id) > 1
+		) and rowid not in (
+		select min(rowid) from DY_ROLE_PERMISSION where role_id =
+		#{roleId,jdbcType=VARCHAR} group by permission_id having
+		count(permission_id) > 1
+		) and role_id = #{roleId,jdbcType=VARCHAR}
+	</delete>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans        
+    http://www.springframework.org/schema/beans/spring-beans.xsd        
+    http://code.alibabatech.com/schema/dubbo        
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 声明需要暴露的服务接口 -->
+	<dubbo:service ref="apiInfoService"
+		interface="com.dante.biz.apiInfo.service.IApiInfoService" />
+	<dubbo:service ref="columnInfoService"
+		interface="com.dante.biz.apiInfo.service.IColumnInfoService" />
+	<dubbo:service ref="userService"
+		interface="com.dante.biz.user.service.IUserService" />
+	<dubbo:service ref="permissionService"
+		interface="com.dante.biz.permission.service.IPermissionService" />
+	<dubbo:service ref="roleService"
+		interface="com.dante.biz.role.service.IRoleService" />
+	<dubbo:service ref="ueditorFileService"
+		interface="com.dante.biz.ueditor.service.IUeditorFileService" />	
+	<dubbo:service ref="imageService"
+		interface="com.dante.biz.fileUpload.service.IImageService" />	
+	<dubbo:service ref="cmsInfoService"
+		interface="com.dante.biz.cmsInfo.service.ICmsInfoService" />
+	<dubbo:service ref="fileOperationService"
+		interface="com.dante.biz.fileUpload.service.IFileOperationService" />			
+</beans>

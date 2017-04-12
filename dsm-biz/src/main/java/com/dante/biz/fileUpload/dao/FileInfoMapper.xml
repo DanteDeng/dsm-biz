@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dante.biz.fileUpload.dao.FileInfoMapper">
+	<resultMap id="BaseResultMap" type="com.dante.model.fileUpload.FileInfo">
+		<id column="FILE_ID" jdbcType="VARCHAR" property="fileId" />
+		<result column="FILE_PATH" jdbcType="VARCHAR" property="filePath" />
+		<result column="FILE_NAME" jdbcType="VARCHAR" property="fileName" />
+		<result column="FILE_SUFFIX" jdbcType="VARCHAR" property="fileSuffix" />
+		<result column="FILE_SIZE" jdbcType="VARCHAR" property="fileSize" />
+		<result column="FILE_MD5" jdbcType="VARCHAR" property="fileMd5" />
+		<result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
+		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+		<result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />
+		<result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		FILE_ID, FILE_PATH, FILE_NAME, FILE_SUFFIX, FILE_SIZE, FILE_MD5, CREATE_BY,
+		CREATE_DATE,
+		UPDATE_BY, UPDATE_DATE
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from DANTE_FILE_INFO
+		where FILE_ID = #{fileId,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from DANTE_FILE_INFO
+		where FILE_ID = #{fileId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.dante.model.fileUpload.FileInfo">
+		<selectKey resultType="java.lang.String" keyProperty="fileId"
+			order="BEFORE">
+			select sys_guid() from dual
+		</selectKey>
+		insert into DANTE_FILE_INFO (FILE_ID, FILE_PATH, FILE_NAME,
+		FILE_SUFFIX, FILE_SIZE, FILE_MD5,
+		CREATE_BY, CREATE_DATE, UPDATE_BY,
+		UPDATE_DATE)
+		values (#{fileId,jdbcType=VARCHAR}, #{filePath,jdbcType=VARCHAR},
+		#{fileName,jdbcType=VARCHAR},
+		#{fileSuffix,jdbcType=VARCHAR}, #{fileSize,jdbcType=VARCHAR}, #{fileMd5,jdbcType=VARCHAR},
+		#{createBy,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP},
+		#{updateBy,jdbcType=VARCHAR},
+		#{updateDate,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.dante.model.fileUpload.FileInfo">
+		insert into DANTE_FILE_INFO
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="fileId != null">
+				FILE_ID,
+			</if>
+			<if test="filePath != null">
+				FILE_PATH,
+			</if>
+			<if test="fileName != null">
+				FILE_NAME,
+			</if>
+			<if test="fileSuffix != null">
+				FILE_SUFFIX,
+			</if>
+			<if test="fileSize != null">
+				FILE_SIZE,
+			</if>
+			<if test="fileMd5 != null">
+				FILE_MD5,
+			</if>
+			<if test="createBy != null">
+				CREATE_BY,
+			</if>
+			<if test="createDate != null">
+				CREATE_DATE,
+			</if>
+			<if test="updateBy != null">
+				UPDATE_BY,
+			</if>
+			<if test="updateDate != null">
+				UPDATE_DATE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="fileId != null">
+				#{fileId,jdbcType=VARCHAR},
+			</if>
+			<if test="filePath != null">
+				#{filePath,jdbcType=VARCHAR},
+			</if>
+			<if test="fileName != null">
+				#{fileName,jdbcType=VARCHAR},
+			</if>
+			<if test="fileSuffix != null">
+				#{fileSuffix,jdbcType=VARCHAR},
+			</if>
+			<if test="fileSize != null">
+				#{fileSize,jdbcType=VARCHAR},
+			</if>
+			<if test="fileMd5 != null">
+				#{fileMd5,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createDate != null">
+				#{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null">
+				#{updateDate,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.dante.model.fileUpload.FileInfo">
+		update DANTE_FILE_INFO
+		<set>
+			<if test="filePath != null">
+				FILE_PATH = #{filePath,jdbcType=VARCHAR},
+			</if>
+			<if test="fileName != null">
+				FILE_NAME = #{fileName,jdbcType=VARCHAR},
+			</if>
+			<if test="fileSuffix != null">
+				FILE_SUFFIX = #{fileSuffix,jdbcType=VARCHAR},
+			</if>
+			<if test="fileSize != null">
+				FILE_SIZE = #{fileSize,jdbcType=VARCHAR},
+			</if>
+			<if test="fileMd5 != null">
+				FILE_MD5 = #{fileMd5,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				CREATE_BY = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createDate != null">
+				CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				UPDATE_BY = #{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null">
+				UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where FILE_ID = #{fileId,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.dante.model.fileUpload.FileInfo">
+		update DANTE_FILE_INFO
+		set FILE_PATH = #{filePath,jdbcType=VARCHAR},
+		FILE_NAME = #{fileName,jdbcType=VARCHAR},
+		FILE_SUFFIX = #{fileSuffix,jdbcType=VARCHAR},
+		FILE_SIZE = #{fileSize,jdbcType=VARCHAR},
+		FILE_MD5 = #{fileMd5,jdbcType=VARCHAR},
+		CREATE_BY = #{createBy,jdbcType=VARCHAR},
+		CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+		UPDATE_BY = #{updateBy,jdbcType=VARCHAR},
+		UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+		where FILE_ID = #{fileId,jdbcType=VARCHAR}
+	</update>
+	<select id="queryFileInfoList" parameterType="com.dante.model.fileUpload.FileInfoParam"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from DANTE_FILE_INFO
+		<where>
+			<if test="filePath!=null and filePath!='' and checkSubFile==false">
+				and FILE_PATH = #{filePath,jdbcType=VARCHAR}
+			</if>
+			<if test="filePath!=null and filePath!='' and checkSubFile==true">
+				and (FILE_PATH = #{filePath,jdbcType=VARCHAR} or FILE_PATH like #{filePath,jdbcType=VARCHAR}||'\%')
+			</if>
+		</where>
+	</select>
+	<delete id="deleteFileInfo" parameterType="com.dante.model.fileUpload.FileInfo">
+		delete from DANTE_FILE_INFO
+		<where>
+			<if test="fileId!=null and fileId!=''">
+				and FILE_ID = #{fileId,jdbcType=VARCHAR}
+			</if>
+			<if test="filePath!=null and filePath!=''">
+				and (FILE_PATH = #{filePath,jdbcType=VARCHAR} or FILE_PATH like #{filePath,jdbcType=VARCHAR}||'\%')
+			</if>
+			<if test="fileName!=null and fileName!=''">
+				and FILE_NAME = #{fileName,jdbcType=VARCHAR}
+			</if>
+			<if test="fileSuffix!=null and fileSuffix!=''">
+				and FILE_SUFFIX = #{fileSuffix,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</delete>
+</mapper>
