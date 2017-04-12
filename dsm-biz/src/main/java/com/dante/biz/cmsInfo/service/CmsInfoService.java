@@ -99,6 +99,7 @@ public class CmsInfoService implements ICmsInfoService{
 				fileInfo.setFileString(cmsImageUrl.replace(BASE64_IMG_PREFIX, ""));
 				fileInfo.setFilePath(CMS_FILE_PATH);
 				fileInfo.setFileName(formatCmsImageName());
+				fileInfo.setFileSuffix("jpg");
 				fileInfo.setCheckSameFile(true);			//设置不去保存重复的文件
 				try {
 					String fileUrl = fileOperationService.saveFile(fileInfo);
@@ -117,7 +118,7 @@ public class CmsInfoService implements ICmsInfoService{
 
 	private String formatCmsImageName() {
 		long timestamp = System.currentTimeMillis();
-		String cmsImageName = timestamp+".jpg";
+		String cmsImageName = ""+timestamp;
 		return cmsImageName;
 	}
 

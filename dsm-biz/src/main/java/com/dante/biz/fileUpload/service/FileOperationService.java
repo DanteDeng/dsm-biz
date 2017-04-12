@@ -1,8 +1,11 @@
 package com.dante.biz.fileUpload.service;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,6 +149,28 @@ public class FileOperationService implements IFileOperationService{
 		fileInfoMapper.deleteFileInfo(fi);
 		deleteFlag = file.delete();
 		return deleteFlag;
+	}
+
+	@Override
+	public String readFile(String configFilePath) {
+		File file = new File(configFilePath);
+		if(file.exists()&&file.isFile()){
+			try {
+				StringBuilder builder = new StringBuilder();
+				InputStreamReader reader = new InputStreamReader(new FileInputStream(configFilePath), "UTF-8");
+				BufferedReader bfReader = new BufferedReader(reader);
+				String tmpContent = null;
+				while ((tmpContent = bfReader.readLine()) != null) {
+					builder.append(tmpContent);
+				}
+				bfReader.close();
+				return builder.toString();
+			} catch (FileNotFoundException e) {} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 	
 }
